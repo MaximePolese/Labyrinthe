@@ -1,17 +1,17 @@
 console.log('JS chargé');
 
-function getData() {
-    return data;
+function getData(size, ex) {
+    return data[0][size][ex];
 }
 
-getData();
-console.log(data);
+let labyrinthe = getData('3', 'ex-0');
+console.log(labyrinthe);
 
-function displayLabyrinthe(data) {
-    data.forEach(function (cube) {
-        let addCase = $('<div>');
-        addCase.text('Case1');
-        $('.container').append(addCase);
+function displayLabyrinthe(labyrinthe) {
+    labyrinthe.forEach(function () {
+        let div = $('<div>');
+        div.text('Case1');
+        $('body').append(div);
     });
 }
 
