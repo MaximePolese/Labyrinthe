@@ -1,6 +1,24 @@
+html {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+main {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 div {
-background-color: lightgrey;
+    background-color: lightgrey;
     width: 100px;
     height: 100px;
 }
 
+.entrance {
+    background-color: orange;
+}
+
+.exit {
+    background-color: #7fff00;
+}
