@@ -4,9 +4,14 @@ html {
     margin: 0;
 }
 
+body {
+    display: flex;
+    justify-content: center;
+}
 main {
     display: flex;
     flex-wrap: wrap;
+    margin-top: 50px;
 }
 
 div {
