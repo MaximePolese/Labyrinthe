@@ -9,6 +9,7 @@ body {
     justify-content: center;
     background-color: black;
 }
+
 main {
     display: flex;
     flex-wrap: wrap;
@@ -16,16 +17,16 @@ main {
 }
 
 div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: darkgrey;
     width: 100px;
     height: 100px;
     border: solid 1px red;
 }
 
-.entrance {
-    background-color: orange;
-}
-
-.exit {
-    background-color: #7fff00;
+img {
+    width: auto;
+    height: 100px;
 }
