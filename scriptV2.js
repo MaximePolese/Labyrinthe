@@ -5,6 +5,7 @@ class Cell {
         this.walls = cellData.walls;
         this.entrance = cellData.entrance;
         this.exit = cellData.exit;
+        this.visited = false;
 
     }
 
@@ -14,7 +15,8 @@ class Cell {
 
     entranceOrExit(cell) {
         if (this.entrance) {
-            cell.css('background-color', 'orange');
+            cell.css('background-color', 'yellow');
+            this.visited = true;
         } else if (this.exit) {
             cell.css('background-color', '#7fff00');
         }
@@ -29,7 +31,7 @@ class Cell {
     }
 }
 
-let size = '10';
+let size = '6';
 let ex = 'ex-2';
 let labyData = data[0][size][ex];
 
@@ -38,6 +40,7 @@ class Labyrinthe {
         this.cells = this.initCells(labyData);
         this.playerPosX = 0;
         this.playerPosY = 0;
+        this.stack = [];
     }
 
 // Construction du labyrinthe
@@ -59,9 +62,9 @@ class Labyrinthe {
 
 // Construction du player
     initPlayer() {
-        let entrance = this.cells.find((el) => el.entrance)
-        this.playerPosX = entrance.posX
-        this.playerPosY = entrance.posY
+        let entrance = this.cells.find((el) => el.entrance);
+        this.playerPosX = entrance.posX;
+        this.playerPosY = entrance.posY;
     }
 
     displayPlayer() {
@@ -74,13 +77,72 @@ class Labyrinthe {
     }
 
 //Résolution du labyrinthe
+    isVisited() {
+        return this.currentCell(this.playerPosX, this.playerPosY).visited = true;
+    }
 
+    currentCell(x, y) {
+        return this.cells.find((el) => (el.posX === x && el.posY === y));
+    }
+
+    topCell(x, y) {
+        return this.cells.find((el) => (el.posX === (x - 1) && el.posY === y));
+    }
+
+    rightCell(x, y) {
+        return this.cells.find((el) => (el.posX === x && el.posY === (y + 1)));
+    }
+
+    bottomCell(x, y) {
+        return this.cells.find((el) => (el.posX === (x + 1) && el.posY === y));
+    }
+
+    leftCell(x, y) {
+        return this.cells.find((el) => (el.posX === x && el.posY === (y - 1)));
+    }
+
+    exitCell(x, y) {
+        return this.cells.find((el) => (el.posX === x && el.posY === y && el.exit));
+    }
+
+    findNextPos() {
+        if (this.currentCell(this.playerPosX, this.playerPosY).walls[0] === false && this.topCell(this.playerPosX, this.playerPosY).visited === false) {
+            this.stack.push(this.topCell(this.playerPosX, this.playerPosY));
+        }
+        if (this.currentCell(this.playerPosX, this.playerPosY).walls[1] === false && this.rightCell(this.playerPosX, this.playerPosY).visited === false) {
+            this.stack.push(this.rightCell(this.playerPosX, this.playerPosY));
+        }
+        if (this.currentCell(this.playerPosX, this.playerPosY).walls[2] === false && this.bottomCell(this.playerPosX, this.playerPosY).visited === false) {
+            this.stack.push(this.bottomCell(this.playerPosX, this.playerPosY));
+        }
+        if (this.currentCell(this.playerPosX, this.playerPosY).walls[3] === false && this.leftCell(this.playerPosX, this.playerPosY).visited === false) {
+            this.stack.push(this.leftCell(this.playerPosX, this.playerPosY));
+        }
+    }
+
+    movePlayer() {
+        this.isVisited();
+        console.log(this.stack);
+        let temp = this.stack.pop();
+        this.playerPosX = temp.posX;
+        this.playerPosY = temp.posY;
+    }
 }
 
 let labyrinthe = new Labyrinthe(labyData);
-
 labyrinthe.display();
 console.log(labyrinthe);
 labyrinthe.initPlayer();
 labyrinthe.displayPlayer();
 
+$('body').on('click', function () {
+    if (labyrinthe.exitCell(labyrinthe.playerPosX, labyrinthe.playerPosY)) {
+        alert('You WIN !');
+    } else {
+        labyrinthe.erasePlayer();
+        labyrinthe.findNextPos();
+        labyrinthe.movePlayer();
+        console.log(labyrinthe.playerPosX, labyrinthe.playerPosY);
+        labyrinthe.displayPlayer();
+    }
+});
