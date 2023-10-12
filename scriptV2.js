@@ -31,7 +31,7 @@ class Cell {
     }
 }
 
-let size = '6';
+let size = '10';
 let ex = 'ex-2';
 let labyData = data[0][size][ex];
 
@@ -105,7 +105,7 @@ class Labyrinthe {
         return this.cells.find((el) => (el.posX === x && el.posY === y && el.exit));
     }
 
-    findNextPos() {
+    findNextPosBFS() {
         if (this.currentCell(this.playerPosX, this.playerPosY).walls[0] === false && this.topCell(this.playerPosX, this.playerPosY).visited === false) {
             this.stack.unshift(this.topCell(this.playerPosX, this.playerPosY));
         }
@@ -117,6 +117,21 @@ class Labyrinthe {
         }
         if (this.currentCell(this.playerPosX, this.playerPosY).walls[3] === false && this.leftCell(this.playerPosX, this.playerPosY).visited === false) {
             this.stack.unshift(this.leftCell(this.playerPosX, this.playerPosY));
+        }
+    }
+
+    findNextPosDFS() {
+        if (this.currentCell(this.playerPosX, this.playerPosY).walls[0] === false && this.topCell(this.playerPosX, this.playerPosY).visited === false) {
+            this.stack.push(this.topCell(this.playerPosX, this.playerPosY));
+        }
+        if (this.currentCell(this.playerPosX, this.playerPosY).walls[1] === false && this.rightCell(this.playerPosX, this.playerPosY).visited === false) {
+            this.stack.push(this.rightCell(this.playerPosX, this.playerPosY));
+        }
+        if (this.currentCell(this.playerPosX, this.playerPosY).walls[2] === false && this.bottomCell(this.playerPosX, this.playerPosY).visited === false) {
+            this.stack.push(this.bottomCell(this.playerPosX, this.playerPosY));
+        }
+        if (this.currentCell(this.playerPosX, this.playerPosY).walls[3] === false && this.leftCell(this.playerPosX, this.playerPosY).visited === false) {
+            this.stack.push(this.leftCell(this.playerPosX, this.playerPosY));
         }
     }
 
@@ -140,7 +155,8 @@ $('body').on('click', function () {
         alert('You WIN !');
     } else {
         labyrinthe.erasePlayer();
-        labyrinthe.findNextPos();
+        // labyrinthe.findNextPosBFS();
+        labyrinthe.findNextPosDFS();
         labyrinthe.movePlayer();
         console.log(labyrinthe.playerPosX, labyrinthe.playerPosY);
         labyrinthe.displayPlayer();
