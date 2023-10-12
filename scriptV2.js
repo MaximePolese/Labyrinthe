@@ -107,16 +107,16 @@ class Labyrinthe {
 
     findNextPos() {
         if (this.currentCell(this.playerPosX, this.playerPosY).walls[0] === false && this.topCell(this.playerPosX, this.playerPosY).visited === false) {
-            this.stack.push(this.topCell(this.playerPosX, this.playerPosY));
+            this.stack.unshift(this.topCell(this.playerPosX, this.playerPosY));
         }
         if (this.currentCell(this.playerPosX, this.playerPosY).walls[1] === false && this.rightCell(this.playerPosX, this.playerPosY).visited === false) {
-            this.stack.push(this.rightCell(this.playerPosX, this.playerPosY));
+            this.stack.unshift(this.rightCell(this.playerPosX, this.playerPosY));
         }
         if (this.currentCell(this.playerPosX, this.playerPosY).walls[2] === false && this.bottomCell(this.playerPosX, this.playerPosY).visited === false) {
-            this.stack.push(this.bottomCell(this.playerPosX, this.playerPosY));
+            this.stack.unshift(this.bottomCell(this.playerPosX, this.playerPosY));
         }
         if (this.currentCell(this.playerPosX, this.playerPosY).walls[3] === false && this.leftCell(this.playerPosX, this.playerPosY).visited === false) {
-            this.stack.push(this.leftCell(this.playerPosX, this.playerPosY));
+            this.stack.unshift(this.leftCell(this.playerPosX, this.playerPosY));
         }
     }
 
