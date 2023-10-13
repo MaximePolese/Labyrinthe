@@ -6,7 +6,6 @@ class Cell {
         this.entrance = cellData.entrance;
         this.exit = cellData.exit;
         this.visited = false;
-
     }
 
     computeBorders() {
@@ -31,9 +30,9 @@ class Cell {
     }
 }
 
-let size = '10';
+let size = '5';
 let ex = 'ex-2';
-let labyData = data[0][size][ex];
+let labyData = data[size][ex];
 
 class Labyrinthe {
     constructor(labyData) {
@@ -41,6 +40,8 @@ class Labyrinthe {
         this.playerPosX = 0;
         this.playerPosY = 0;
         this.stack = [];
+        this.pas = 0;
+        this.path = [];
     }
 
 // Construction du labyrinthe
@@ -73,7 +74,7 @@ class Labyrinthe {
     }
 
     erasePlayer() {
-        $('img').attr('src', '');
+        $('#' + this.playerPosX + "-" + this.playerPosY).html(this.pas++);
     }
 
 //Résolution du labyrinthe
@@ -107,40 +108,43 @@ class Labyrinthe {
 
     findNextPosBFS() {
         if (this.currentCell(this.playerPosX, this.playerPosY).walls[0] === false && this.topCell(this.playerPosX, this.playerPosY).visited === false) {
+            this.topCell(this.playerPosX, this.playerPosY).parent = this.currentCell(this.playerPosX, this.playerPosY);
             this.stack.unshift(this.topCell(this.playerPosX, this.playerPosY));
         }
         if (this.currentCell(this.playerPosX, this.playerPosY).walls[1] === false && this.rightCell(this.playerPosX, this.playerPosY).visited === false) {
+            this.rightCell(this.playerPosX, this.playerPosY).parent = this.currentCell(this.playerPosX, this.playerPosY);
             this.stack.unshift(this.rightCell(this.playerPosX, this.playerPosY));
         }
         if (this.currentCell(this.playerPosX, this.playerPosY).walls[2] === false && this.bottomCell(this.playerPosX, this.playerPosY).visited === false) {
+            this.bottomCell(this.playerPosX, this.playerPosY).parent = this.currentCell(this.playerPosX, this.playerPosY);
             this.stack.unshift(this.bottomCell(this.playerPosX, this.playerPosY));
         }
         if (this.currentCell(this.playerPosX, this.playerPosY).walls[3] === false && this.leftCell(this.playerPosX, this.playerPosY).visited === false) {
+            this.leftCell(this.playerPosX, this.playerPosY).parent = this.currentCell(this.playerPosX, this.playerPosY);
             this.stack.unshift(this.leftCell(this.playerPosX, this.playerPosY));
         }
     }
 
-    findNextPosDFS() {
-        if (this.currentCell(this.playerPosX, this.playerPosY).walls[0] === false && this.topCell(this.playerPosX, this.playerPosY).visited === false) {
-            this.stack.push(this.topCell(this.playerPosX, this.playerPosY));
-        }
-        if (this.currentCell(this.playerPosX, this.playerPosY).walls[1] === false && this.rightCell(this.playerPosX, this.playerPosY).visited === false) {
-            this.stack.push(this.rightCell(this.playerPosX, this.playerPosY));
-        }
-        if (this.currentCell(this.playerPosX, this.playerPosY).walls[2] === false && this.bottomCell(this.playerPosX, this.playerPosY).visited === false) {
-            this.stack.push(this.bottomCell(this.playerPosX, this.playerPosY));
-        }
-        if (this.currentCell(this.playerPosX, this.playerPosY).walls[3] === false && this.leftCell(this.playerPosX, this.playerPosY).visited === false) {
-            this.stack.push(this.leftCell(this.playerPosX, this.playerPosY));
+    getPath(s) {
+        while (s.parent !== undefined) {
+            this.path.unshift(s);
+            s = s.parent;
         }
     }
 
-    movePlayer() {
+    playerPath() {
         this.isVisited();
-        console.log(this.stack);
+        // for (let n of this.stack) {
+        //     console.log(n);
+        // }
         let temp = this.stack.pop();
         this.playerPosX = temp.posX;
         this.playerPosY = temp.posY;
+    }
+
+    movePlayer(tile) {
+        this.playerPosX = tile.posX;
+        this.playerPosY = tile.posY;
     }
 }
 
@@ -151,14 +155,21 @@ labyrinthe.initPlayer();
 labyrinthe.displayPlayer();
 
 $('body').on('click', function () {
-    if (labyrinthe.exitCell(labyrinthe.playerPosX, labyrinthe.playerPosY)) {
-        alert('You WIN !');
-    } else {
+    labyrinthe.stack = [];
+    labyrinthe.path = [];
+    labyrinthe.pas = 0;
+    while (!labyrinthe.exitCell(labyrinthe.playerPosX, labyrinthe.playerPosY)) {
+        labyrinthe.findNextPosBFS();
+        labyrinthe.playerPath();
+        // console.log(labyrinthe.playerPosX, labyrinthe.playerPosY);
+    }
+    // console.log(labyrinthe.cells);
+    labyrinthe.getPath(labyrinthe.cells.find(el => el.exit));
+    labyrinthe.initPlayer();
+    console.log(labyrinthe.path);
+    for (let cell of labyrinthe.path) {
         labyrinthe.erasePlayer();
-        // labyrinthe.findNextPosBFS();
-        labyrinthe.findNextPosDFS();
-        labyrinthe.movePlayer();
-        console.log(labyrinthe.playerPosX, labyrinthe.playerPosY);
+        labyrinthe.movePlayer(cell);
         labyrinthe.displayPlayer();
     }
 });
