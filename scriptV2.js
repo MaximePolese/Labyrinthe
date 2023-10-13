@@ -8,14 +8,13 @@ class Cell {
         this.visited = false;
     }
 
-    computeBorders() {
+    displayBorders() {
         return this.walls.map(wall => wall ? '1px' : '0px').join(' ');
     }
 
     entranceOrExit(cell) {
         if (this.entrance) {
             cell.css('background-color', 'yellow');
-            this.visited = true;
         } else if (this.exit) {
             cell.css('background-color', '#7fff00');
         }
@@ -24,7 +23,7 @@ class Cell {
     getDOM() {
         let cellDOM = $('<div>');
         cellDOM.attr('id', [this.posX, this.posY].join('-'));
-        cellDOM.css('borderWidth', this.computeBorders());
+        cellDOM.css('borderWidth', this.displayBorders());
         this.entranceOrExit(cellDOM);
         return cellDOM;
     }
@@ -40,8 +39,8 @@ class Labyrinthe {
         this.playerPosX = 0;
         this.playerPosY = 0;
         this.stack = [];
-        this.nbPas = 0;
         this.path = [];
+        this.nbPas = 0;
     }
 
 // Construction du labyrinthe
@@ -134,9 +133,6 @@ class Labyrinthe {
 
     playerPath() {
         this.isVisited();
-        // for (let n of this.stack) {
-        //     console.log(n);
-        // }
         let temp = this.stack.pop();
         this.playerPosX = temp.posX;
         this.playerPosY = temp.posY;
@@ -157,16 +153,13 @@ labyrinthe.displayPlayer();
 $('body').on('click', function () {
     labyrinthe.stack = [];
     labyrinthe.path = [];
-    labyrinthe.pas = 0;
+    labyrinthe.nbPas = 0;
     while (!labyrinthe.exitCell(labyrinthe.playerPosX, labyrinthe.playerPosY)) {
         labyrinthe.findNextPosBFS();
         labyrinthe.playerPath();
-        // console.log(labyrinthe.playerPosX, labyrinthe.playerPosY);
     }
-    // console.log(labyrinthe.cells);
     labyrinthe.getPath(labyrinthe.cells.find(el => el.exit));
     labyrinthe.initPlayer();
-    console.log(labyrinthe.path);
     for (let cell of labyrinthe.path) {
         labyrinthe.erasePlayer();
         labyrinthe.movePlayer(cell);
