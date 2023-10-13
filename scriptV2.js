@@ -125,10 +125,10 @@ class Labyrinthe {
         }
     }
 
-    getPath(s) {
-        while (s.parent !== undefined) {
-            this.path.unshift(s);
-            s = s.parent;
+    getPath(arrivee) {
+        while (arrivee.parent !== undefined) {
+            this.path.unshift(arrivee);
+            arrivee = arrivee.parent;
         }
     }
 
