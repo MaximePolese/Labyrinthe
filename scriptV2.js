@@ -30,7 +30,7 @@ class Cell {
     }
 }
 
-let size = '24';
+let size = '11';
 let ex = 'ex-2';
 let labyData = data[size][ex];
 
@@ -40,7 +40,7 @@ class Labyrinthe {
         this.playerPosX = 0;
         this.playerPosY = 0;
         this.stack = [];
-        this.pas = 0;
+        this.nbPas = 0;
         this.path = [];
     }
 
@@ -74,7 +74,7 @@ class Labyrinthe {
     }
 
     erasePlayer() {
-        $('#' + this.playerPosX + "-" + this.playerPosY).html(this.pas++);
+        $('#' + this.playerPosX + "-" + this.playerPosY).html(this.nbPas++);
     }
 
 //Résolution du labyrinthe
