@@ -30,7 +30,7 @@ class Cell {
     }
 }
 
-let size = '5';
+let size = '24';
 let ex = 'ex-2';
 let labyData = data[size][ex];
 
