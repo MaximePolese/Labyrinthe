@@ -124,10 +124,10 @@ class Labyrinthe {
         }
     }
 
-    getPath(arrivee) {
-        while (arrivee.parent !== undefined) {
-            this.path.unshift(arrivee);
-            arrivee = arrivee.parent;
+    getPath(toExit) {
+        while (toExit.parent !== undefined) {
+            this.path.unshift(toExit);
+            toExit = toExit.parent;
         }
     }
 
@@ -138,9 +138,9 @@ class Labyrinthe {
         this.playerPosY = temp.posY;
     }
 
-    movePlayer(tile) {
-        this.playerPosX = tile.posX;
-        this.playerPosY = tile.posY;
+    movePlayer(cell) {
+        this.playerPosX = cell.posX;
+        this.playerPosY = cell.posY;
     }
 }
 
